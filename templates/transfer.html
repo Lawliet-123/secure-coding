@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+<h2>송금</h2>
+<p class="balance">현재 잔액: <strong>{{ user.balance }}원</strong></p>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>받는 사람 아이디 <input name="to_username" required maxlength="20"></label>
+  <label>금액 <input name="amount" type="number" min="1" max="999999999" required></label>
+  <label>메모 <input name="memo" maxlength="100"></label>
+  <label>비밀번호 확인 <input type="password" name="password" required></label>
+  <button class="btn" type="submit">송금하기</button>
+</form>
+</div>
+<div class="card">
+<h3>거래 내역</h3>
+<table>
+<tr><th>일시</th><th>보낸 사람</th><th>받는 사람</th><th>금액</th><th>메모</th></tr>
+{% for t in history %}
+<tr><td>{{ t.created_at }}</td><td>{{ t.sender }}</td><td>{{ t.receiver }}</td><td>{{ t.amount }}원</td><td>{{ t.memo }}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">내역이 없습니다.</td></tr>{% endfor %}
+</table>
+</div>
+{% endblock %}

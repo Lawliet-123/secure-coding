@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+<h2>{{ partner.username }} 님과의 대화</h2>
+<div id="dmbox" class="chatbox">
+{% for m in messages %}<p><b>{{ m.sender_name }}</b>: {{ m.content }}</p>{% endfor %}
+</div>
+<form id="dmform" class="chatform">
+  <input id="dmmsg" maxlength="500" placeholder="메시지를 입력하세요" autocomplete="off">
+  <button class="btn" type="submit">전송</button>
+</form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script id="dmdata" type="application/json">{{ partner.id|tojson }}</script>
+<script src="{{ url_for('static', filename='dm.js') }}"></script>
+{% endblock %}

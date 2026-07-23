@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+<h2>관리자 - 사용자</h2>
+<table>
+<tr><th>아이디</th><th>상태</th><th>잔액</th><th>관리</th></tr>
+{% for u in users %}
+<tr>
+  <td>{{ u.username }}</td><td>{{ u.status }}</td><td>{{ u.balance }}</td>
+  <td>
+    {% if not u.is_admin %}
+    <form method="post" action="{{ url_for('admin_user_action', user_id=u.id, action='dormant' if u.status=='active' else 'active') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn small {{ 'danger' if u.status=='active' else '' }}" type="submit">{{ '휴면 전환' if u.status=='active' else '활성화' }}</button>
+    </form>
+    {% else %}<span class="tag">admin</span>{% endif %}
+  </td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+<div class="card">
+<h2>관리자 - 상품</h2>
+<table>
+<tr><th>상품명</th><th>판매자</th><th>가격</th><th>상태</th><th>관리</th></tr>
+{% for p in products %}
+<tr>
+  <td><a href="{{ url_for('view_product', product_id=p.id) }}">{{ p.title }}</a></td>
+  <td>{{ p.seller }}</td><td>{{ p.price }}</td><td>{{ p.status }}</td>
+  <td class="row">
+    <form method="post" action="{{ url_for('admin_product_action', product_id=p.id, action='blocked' if p.status=='active' else 'active') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn small" type="submit">{{ '차단' if p.status=='active' else '해제' }}</button>
+    </form>
+    <form method="post" action="{{ url_for('admin_product_action', product_id=p.id, action='delete') }}" onsubmit="return confirm('삭제할까요?')">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn small danger" type="submit">삭제</button>
+    </form>
+  </td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+<div class="card">
+<h2>관리자 - 신고 내역</h2>
+<table>
+<tr><th>신고자</th><th>대상</th><th>유형</th><th>사유</th><th>일시</th></tr>
+{% for r in reports %}
+<tr><td>{{ r.reporter }}</td><td class="mono">{{ r.target_id }}</td><td>{{ r.target_type }}</td><td>{{ r.reason }}</td><td>{{ r.created_at }}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">신고 내역이 없습니다.</td></tr>{% endfor %}
+</table>
+</div>
+{% endblock %}

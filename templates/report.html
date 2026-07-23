@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+<h2>신고하기</h2>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>대상 ID <input name="target_id" value="{{ target_id }}" required maxlength="64"></label>
+  <label>대상 유형
+    <select name="target_type">
+      <option value="product" {% if target_type=='product' %}selected{% endif %}>상품</option>
+      <option value="user" {% if target_type=='user' %}selected{% endif %}>사용자</option>
+    </select>
+  </label>
+  <label>신고 사유 <textarea name="reason" required maxlength="500" rows="4"></textarea></label>
+  <button class="btn danger" type="submit">신고 접수</button>
+</form>
+</div>
+{% endblock %}

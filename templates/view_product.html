@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+<h2>{{ product.title }}</h2>
+{% if product.image %}<img class="thumb" src="{{ url_for('static', filename='uploads/' ~ product.image) }}" alt="상품 이미지">{% endif %}
+<p class="price big">{{ product.price }}원</p>
+<p class="desc">{{ product.description }}</p>
+<p>판매자: <a href="{{ url_for('view_user', user_id=product.seller_id) }}">{{ product.seller }}</a></p>
+{% if product.status != 'active' %}<p class="warn">차단된 상품입니다.</p>{% endif %}
+<div class="row">
+  {% if product.seller_id != current_user.id %}
+  <a class="btn" href="{{ url_for('direct_message', user_id=product.seller_id) }}">1:1 채팅</a>
+  <a class="btn secondary" href="{{ url_for('report', target_id=product.id, target_type='product') }}">신고</a>
+  {% endif %}
+  {% if product.seller_id == current_user.id or current_user.is_admin %}
+  <a class="btn" href="{{ url_for('edit_product', product_id=product.id) }}">수정</a>
+  <form method="post" action="{{ url_for('delete_product', product_id=product.id) }}" onsubmit="return confirm('삭제할까요?')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn danger" type="submit">삭제</button>
+  </form>
+  {% endif %}
+</div>
+</div>
+{% endblock %}

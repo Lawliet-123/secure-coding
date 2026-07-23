@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+<h2>내가 등록한 상품</h2>
+<ul class="products">
+{% for p in products %}
+  <li>
+    <a href="{{ url_for('view_product', product_id=p.id) }}">{{ p.title }}</a>
+    <span class="price">{{ p.price }}원</span>
+    <span class="tag {{ p.status }}">{{ p.status }}</span>
+    <a class="btn small" href="{{ url_for('edit_product', product_id=p.id) }}">수정</a>
+    <form method="post" action="{{ url_for('delete_product', product_id=p.id) }}" onsubmit="return confirm('삭제할까요?')">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn small danger" type="submit">삭제</button>
+    </form>
+  </li>
+{% else %}<li class="empty">등록한 상품이 없습니다.</li>{% endfor %}
+</ul>
+</div>
+{% endblock %}

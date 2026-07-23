@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+<h2>전체 상품</h2>
+<form method="get" class="searchbar">
+  <input name="q" value="{{ q }}" placeholder="상품명 또는 설명 검색" maxlength="50">
+  <button class="btn" type="submit">검색</button>
+</form>
+{% if q %}<p class="hint">"{{ q }}" 검색 결과 {{ products|length }}건</p>{% endif %}
+<ul class="products">
+  {% for p in products %}
+  <li>
+    <a href="{{ url_for('view_product', product_id=p.id) }}">{{ p.title }}</a>
+    <span class="price">{{ p.price }}원</span>
+    <span class="seller">{{ p.seller }}</span>
+  </li>
+  {% else %}<li class="empty">등록된 상품이 없습니다.</li>{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h2>전체 채팅</h2>
+<div id="chat" class="chatbox"></div>
+<form id="chatform" class="chatform">
+  <input id="msg" maxlength="500" placeholder="메시지를 입력하세요" autocomplete="off">
+  <button class="btn" type="submit">전송</button>
+</form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='chat.js') }}"></script>
+{% endblock %}

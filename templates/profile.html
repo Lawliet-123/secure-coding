@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+<h2>마이페이지</h2>
+<p>아이디: {{ user.username }}</p>
+<p>잔액: {{ user.balance }}원</p>
+<h3>소개글 수정</h3>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="action" value="bio">
+  <textarea name="bio" maxlength="500" rows="4">{{ user.bio }}</textarea>
+  <button class="btn" type="submit">저장</button>
+</form>
+<h3>비밀번호 변경</h3>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="action" value="password">
+  <label>현재 비밀번호 <input type="password" name="current_password" required></label>
+  <label>새 비밀번호 <input type="password" name="new_password" required minlength="10"></label>
+  <button class="btn" type="submit">변경</button>
+</form>
+</div>
+{% endblock %}

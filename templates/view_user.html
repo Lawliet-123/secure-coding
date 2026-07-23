@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+<h2>{{ user.username }}</h2>
+<p class="desc">{{ user.bio }}</p>
+{% if user.status != 'active' %}<p class="warn">휴면 계정입니다.</p>{% endif %}
+{% if user.id != current_user.id %}
+<div class="row">
+  <a class="btn" href="{{ url_for('direct_message', user_id=user.id) }}">1:1 채팅</a>
+  <a class="btn secondary" href="{{ url_for('report', target_id=user.id, target_type='user') }}">신고</a>
+</div>
+{% endif %}
+<h3>판매 중인 상품</h3>
+<ul class="products">
+{% for p in products %}<li><a href="{{ url_for('view_product', product_id=p.id) }}">{{ p.title }}</a><span class="price">{{ p.price }}원</span></li>
+{% else %}<li class="empty">없음</li>{% endfor %}
+</ul>
+</div>
+{% endblock %}

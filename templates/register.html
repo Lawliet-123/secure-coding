@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+<h2>회원가입</h2>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>아이디 <input name="username" required maxlength="20" pattern="[A-Za-z0-9_]{3,20}"></label>
+  <label>비밀번호 <input type="password" name="password" required minlength="10"></label>
+  <label>비밀번호 확인 <input type="password" name="password2" required minlength="10"></label>
+  <p class="hint">10자 이상, 영문·숫자·특수문자 포함</p>
+  <button class="btn" type="submit">가입하기</button>
+</form>
+</div>
+{% endblock %}
